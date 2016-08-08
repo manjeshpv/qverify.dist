@@ -30,7 +30,10 @@ exports.default = function (app) {
   app.use(_bodyParser2.default.json());
   app.use((0, _methodOverride2.default)());
   app.use((0, _cookieParser2.default)());
-  app.use('/api/open/users', require('../api/user'));
+  app.use('/api/open/users', function (req, res, next) {
+    console.log("s");
+    return require('../api/user')(req, res, next);
+  });
   app.oauth = _oauthjs2.default;
 
   // OAuth Token authorization_code, password, refresh_token
