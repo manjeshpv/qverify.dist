@@ -30,7 +30,6 @@ exports.default = function (app) {
   app.use(_bodyParser2.default.json());
   app.use((0, _methodOverride2.default)());
   app.use((0, _cookieParser2.default)());
-  //app.use('/api/companys', require('./api/company'));
   app.use('/api/open/users', require('../api/user'));
   app.oauth = _oauthjs2.default;
 
