@@ -24,6 +24,8 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 var _sqldb = require('../../sqldb');
 
+var _sqldb2 = _interopRequireDefault(_sqldb);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function respondWithResult(res, statusCode) {
@@ -79,8 +81,9 @@ function index(req, res) {
 function show(req, res) {
   return _sqldb.Company.find({
     where: {
-      _id: req.params.id
-    }
+      id: req.params.id
+    },
+    include: [_sqldb2.default.Location]
   }).then(handleEntityNotFound(res)).then(respondWithResult(res)).catch(handleError(res));
 }
 
