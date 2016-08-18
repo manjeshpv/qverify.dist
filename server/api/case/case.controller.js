@@ -114,9 +114,9 @@ function vendorUploaded(req, res) {
 
 function getFile(req, res) {
   return _sqldb.Case.findById(req.params.id).then(function (caseObj) {
-    return res.json(caseObj.pdf);
     return _sqldb.Minio.downloadLink({
-      object: caseObj.pdf
+      object: caseObj.pdf,
+      name: caseObj.id + '.pdf'
     }).then(function (link) {
       return res.redirect(link);
     });
