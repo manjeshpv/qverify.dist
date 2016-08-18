@@ -137,10 +137,10 @@ function create(req, res) {
     var extention = filename.substring(filename.lastIndexOf('.') + 1);
 
     // only upload if valid file extension
-    if (~['doc', 'docx', 'pdf', 'rtf', 'txt'].indexOf(extention)) {
+    if (~['doc', 'docx', 'pdf', 'rtf', 'txt', 'png', 'jpeg'].indexOf(extention)) {
       (function () {
 
-        var rangeFolder = caseObj.id - caseObj.id % 10000;
+        var rangeFolder = caseObj.id - caseObj.id % 100000;
         var minioObject = {
           // object: 'cases/0/5/5.pdf'
           object: 'cases/' + rangeFolder + '/' + caseObj.id + '/' + caseObj.id + '.' + extention.toLowerCase(),
