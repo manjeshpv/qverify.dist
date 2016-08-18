@@ -17,6 +17,7 @@ exports.show = show;
 exports.create = create;
 exports.update = update;
 exports.destroy = destroy;
+exports.companyUsers = companyUsers;
 
 var _lodash = require('lodash');
 
@@ -112,5 +113,19 @@ function destroy(req, res) {
       _id: req.params.id
     }
   }).then(handleEntityNotFound(res)).then(removeEntity(res)).catch(handleError(res));
+}
+
+function companyUsers(req, res) {
+  console.log(req.params.id);
+  return _sqldb.User.findAll({
+    where: {
+      company_id: req.params.id
+    }
+  }).then(function (users) {
+    if (!users) return res.status(404).json({ message: "Resource not found" });
+    return res.json(users);
+  }).catch(function (err) {
+    return console.log(err);
+  });
 }
 //# sourceMappingURL=company.controller.js.map

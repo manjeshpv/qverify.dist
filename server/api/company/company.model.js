@@ -32,9 +32,9 @@ exports.default = function (sequelize, DataTypes) {
         models.Company.belongsTo(models.User, {
           foreignKey: 'created_by'
         });
-        models.Company.belongsTo(models.User, {
-          foreignKey: 'updated_by'
-        });
+        //models.Company.belongsTo(models.User, {
+        //  foreignKey: `updated_by`
+        //});
         models.Company.hasMany(models.User);
       }
     }
