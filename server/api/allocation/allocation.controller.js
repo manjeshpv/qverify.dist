@@ -157,7 +157,7 @@ function byStatusId(req, res) {
     where: whereClause,
     include: [{
       model: _sqldb.Case,
-      where: { status_id: req.params.status_id },
+      where: { status_id: req.params.status_id.split(',') },
       include: [_sqldb2.default.User, _sqldb2.default.Status, _sqldb2.default.CaseType]
     }, { model: _sqldb2.default.User }, { model: _sqldb2.default.AllocationStatus }]
   }).then(respondWithResult(res)).catch(handleError(res));
