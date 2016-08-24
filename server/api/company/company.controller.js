@@ -75,7 +75,9 @@ function handleError(res, statusCode) {
 
 // Gets a list of Companys
 function index(req, res) {
-  return _sqldb.Company.findAll().then(respondWithResult(res)).catch(handleError(res));
+  return _sqldb.Company.findAll({
+    attributes: ['id', 'name', 'created_on', 'address']
+  }).then(respondWithResult(res)).catch(handleError(res));
 }
 
 // Gets a single Company from the DB

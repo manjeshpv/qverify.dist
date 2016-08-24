@@ -83,8 +83,9 @@ function index(req, res) {
     };
   }
   return _sqldb.Case.findAll({
+    attributes: ['id', 'name', 'created_at'],
     where: whereClause,
-    include: [{ model: _sqldb.Status }, { model: _sqldb.User }, { model: _sqldb.CaseType }, { model: _sqldb.Allocation, include: [_sqldb.User], required: false }]
+    include: [{ model: _sqldb.Status }, { model: _sqldb.User, attributes: ['id', 'name'] }, { model: _sqldb.CaseType, attributes: ['id', 'name'] }, { model: _sqldb.Allocation, attributes: ['id'], include: [_sqldb.User], required: false }]
   }).then(respondWithResult(res)).catch(function (err) {
     return handleError(res, 500, err);
   });
