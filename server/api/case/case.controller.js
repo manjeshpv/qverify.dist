@@ -84,7 +84,7 @@ function index(req, res) {
   }
   return _sqldb.Case.findAll({
     where: whereClause,
-    include: [_sqldb.Status, _sqldb.CaseType]
+    include: [{ model: _sqldb.Status }, { model: _sqldb.User }, { model: _sqldb.CaseType }, { model: _sqldb.Allocation, include: [_sqldb.User], required: false }]
   }).then(respondWithResult(res)).catch(function (err) {
     return handleError(res, 500, err);
   });

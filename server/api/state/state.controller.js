@@ -72,7 +72,7 @@ function handleError(res, statusCode) {
 
 // Gets a list of States
 function index(req, res) {
-  return _sqldb.State.findAll().then(respondWithResult(res)).catch(handleError(res));
+  return _sqldb.State.findAll({ attributes: ['id', 'name'] }).then(respondWithResult(res)).catch(handleError(res));
 }
 
 // Gets a single State from the DB

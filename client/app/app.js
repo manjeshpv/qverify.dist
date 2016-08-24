@@ -1068,7 +1068,7 @@ angular.module('appApp').config(function ($stateProvider) {
 'use strict';
 
 (function () {
-  function OverviewComponent($log, QverifyConnection, $scope) {
+  function OverviewComponent($log, QverifyConnection, $scope, Restangular) {
     var LOG_TAG = 'OverviewComponent';
     var vm = this;
     var qverifyConnection = new QverifyConnection();
@@ -1080,13 +1080,35 @@ angular.module('appApp').config(function ($stateProvider) {
       enableFiltering: true,
       columnDefs: [
       //{name: 'Id', field: 'Case.id'},
-      { name: 'Client', field: 'Case.User.name' }, { name: 'Vendor', field: 'User.name' }, { name: 'Case', field: 'Case.name' }, { name: 'Status', field: 'Case.Status.name' }, { name: 'Created On', field: 'created_on', type: 'date', cellFilter: 'date:"dd-MM-yy "' }]
+      { name: 'Client', field: 'User.name' }, { name: 'Vendor', field: 'Allocations.User.name' }, { name: 'Case', field: 'name' }, { name: 'Status', field: 'Status.name' }, { name: 'Created On', field: 'created_at', type: 'date', cellFilter: 'date:"dd-MM-yy "' }]
     };
 
-    qverifyConnection.fetchAllocation().then(function (allocations) {
-      $scope.myData = allocations;
-      $scope.gridOpts.data = allocations;
+    Restangular.all('cases').getList().then(function (cases) {
+      vm.myData = [];
+      cases.forEach(function (caseObj) {
+        var c = Object.assign({}, caseObj.plain());
+        if (!c.Status) {
+          c.Status = { name: 'New' };
+        }
+        if (caseObj.Allocations.length === 0) {
+          c.Allocations = undefined;
+          vm.myData.push(c);
+        } else {
+          caseObj.Allocations.forEach(function (allocation) {
+            vm.myData.push(Object.assign(c, { Allocations: allocation }));
+          });
+        }
+      });
+      console.log(vm.myData);
+      $scope.myData = vm.myData;
+      $scope.gridOpts.data = vm.myData;
+    }).catch(function (error) {
+      console.log(error);
     });
+    //qverifyConnection.fetchAllocation().then((allocations)=> {
+    //  $scope.myData = allocations;
+    //  $scope.gridOpts.data = allocations;
+    //});
   }
 
   angular.module('appApp').component('overview', {
