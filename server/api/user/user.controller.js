@@ -166,12 +166,11 @@ function register(req, res) {
   //console.log(req.params);
   //console.log(req.query);
   //console.log(req.body);
-
   return _sqldb.User.create(req.body).then(function (user) {
     return res.json(user);
   }).catch(function (err) {
     console.log(err);
-    return res.status(404).json("Invalid data");
+    return res.status(404).json(err);
   });
 }
 
