@@ -4,6 +4,10 @@
 
 'use strict';
 
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -93,6 +97,12 @@ function qualifyBucket(bucketName) {
 db.Minio.base64Upload = function (minioObject) {
   minioObject.buffer = Buffer.from(minioObject.base64String, 'base64');
   return db.Minio.bufferUpload(minioObject);
+};
+
+db.Minio.base64UploadMulti = function (minioObjects) {
+  return _promise2.default.all(minioObjects.map(function (m) {
+    return _minio2.default.base64Upload(m);
+  }));
 };
 
 db.Minio.downloadLinkBase = function (minioObject) {
