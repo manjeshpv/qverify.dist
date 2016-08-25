@@ -85,6 +85,7 @@ function index(req, res) {
   return _sqldb.Case.findAll({
     attributes: ['id', 'name', 'created_at', 'updated_at'],
     where: whereClause,
+    order: 'created_at DESC',
     include: [{ model: _sqldb.Status, attributes: ['id', 'name'] }, { model: _sqldb.User, attributes: ['id', 'name'] }, { model: _sqldb.CaseType, attributes: ['id', 'name'] }, { model: _sqldb.Allocation, attributes: ['id'], include: [{ model: _sqldb.User, attributes: ['id', 'name'] }], required: false }]
   }).then(respondWithResult(res)).catch(function (err) {
     return handleError(res, 500, err);
@@ -128,7 +129,6 @@ function getFile(req, res) {
 
 // Creates a new Case in the DB
 function create(req, res) {
-  req.body.status_id = 1;
   return _sqldb2.default.Case.create(req.body).then(function (caseObj) {
     /* Start Minio */
     var _req$body$logo = req.body.logo;
