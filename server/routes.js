@@ -10,8 +10,6 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function (app) {
   // Insert routes below
-  app.use('/api/pins', app.oauth.authenticate(), require('./api/pin'));
-  app.use('/api/states', app.oauth.authenticate(), require('./api/state'));
   app.use('/api/university_names', app.oauth.authenticate(), require('./api/university_name'));
   app.use('/api/users_phone_relations', app.oauth.authenticate(), require('./api/users_phone_relation'));
   app.use('/api/university_names', app.oauth.authenticate(), require('./api/university_name'));

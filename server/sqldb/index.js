@@ -45,8 +45,6 @@ var db = {
 };
 
 // Insert models below
-db.Pin = db.sequelizeQverify.import('../api/pin/pin.model');
-db.State = db.sequelizeQverify.import('../api/state/state.model');
 db.UniversityName = db.sequelizeQverify.import('../api/university_name/university_name.model');
 db.UsersPhoneRelation = db.sequelizeQverify.import('../api/users_phone_relation/users_phone_relation.model');
 db.HouseType = db.sequelizeQverify.import('../api/house_type/house_type.model');
