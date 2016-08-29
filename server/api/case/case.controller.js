@@ -184,6 +184,8 @@ function create(req, res) {
 
     return casePr.then(function () {
       return res.json(caseObj);
+    }).catch(function (err) {
+      return handleError(res, 500, err);
     });
   }).catch(function (err) {
     return handleError(res, 500, err);
