@@ -12,6 +12,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _typeof2 = require('babel-runtime/helpers/typeof');
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
 exports.index = index;
 exports.show = show;
 exports.getFile = getFile;
@@ -112,7 +117,7 @@ function create(req, res) {
 
     // only upload if valid file extension
     if (~['doc', 'docx', 'pdf', 'rtf', 'txt'].indexOf(extention)) {
-      (function () {
+      var _ret = function () {
 
         var rangeFolder = caseObj.id - caseObj.id % 10000;
         var minioObject = {
@@ -121,23 +126,28 @@ function create(req, res) {
           base64String: base64String
         };
 
-        _sqldb.Minio.base64Upload(minioObject).then(function (re) {
-          return caseObj.update({ image: minioObject.object }).then(function () {
+        return {
+          v: _sqldb.Minio.base64Upload(minioObject).then(function (re) {
+            return caseObj.update({ image: minioObject.object }).then(function () {
 
-            console.log("file saved success");
-            return _sqldb.Case.update({ status_id: 2 }, {
-              where: { id: caseObj.case_id }
-            }).then(function () {
-              return res.json(caseObj);
-            }).catch(function (err) {
-              return handleError(res, 500, err);
+              console.log("file saved success");
+              return _sqldb.Case.update({ status_id: 2 }, {
+                where: { id: caseObj.case_id }
+              }).then(function () {
+                return res.json(caseObj);
+              }).catch(function (err) {
+                return handleError(res, 500, err);
+              });
             });
-          });
-        }).catch(function (err) {
-          return handleError(res, 500, err);
-        });
-      })();
+          }).catch(function (err) {
+            return handleError(res, 500, err);
+          })
+        };
+      }();
+
+      if ((typeof _ret === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret)) === "object") return _ret.v;
     }
+    return res.json(caseObj);
   }).catch(function (err) {
     return handleError(res, 500, err);
   });

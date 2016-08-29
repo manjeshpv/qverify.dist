@@ -17,12 +17,15 @@ exports.show = show;
 exports.create = create;
 exports.update = update;
 exports.destroy = destroy;
+exports.companyUsers = companyUsers;
 
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
 var _sqldb = require('../../sqldb');
+
+var _sqldb2 = _interopRequireDefault(_sqldb);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -72,15 +75,18 @@ function handleError(res, statusCode) {
 
 // Gets a list of Companys
 function index(req, res) {
-  return _sqldb.Company.findAll().then(respondWithResult(res)).catch(handleError(res));
+  return _sqldb.Company.findAll({
+    attributes: ['id', 'name', 'created_on', 'address']
+  }).then(respondWithResult(res)).catch(handleError(res));
 }
 
 // Gets a single Company from the DB
 function show(req, res) {
   return _sqldb.Company.find({
     where: {
-      _id: req.params.id
-    }
+      id: req.params.id
+    },
+    include: [_sqldb2.default.Location]
   }).then(handleEntityNotFound(res)).then(respondWithResult(res)).catch(handleError(res));
 }
 
@@ -109,5 +115,19 @@ function destroy(req, res) {
       _id: req.params.id
     }
   }).then(handleEntityNotFound(res)).then(removeEntity(res)).catch(handleError(res));
+}
+
+function companyUsers(req, res) {
+  console.log(req.params.id);
+  return _sqldb.User.findAll({
+    where: {
+      company_id: req.params.id
+    }
+  }).then(function (users) {
+    if (!users) return res.status(404).json({ message: "Resource not found" });
+    return res.json(users);
+  }).catch(function (err) {
+    return console.log(err);
+  });
 }
 //# sourceMappingURL=company.controller.js.map

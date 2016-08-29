@@ -105,7 +105,15 @@ function show(req, res) {
 // Creates a new Allocation in the DB
 function create(req, res) {
   req.body.allocation_status_id = 1;
-  return _sqldb.Allocation.create(req.body).then(respondWithResult(res, 201)).catch(handleError(res));
+  return _sqldb.Allocation.create(req.body).then(function (allocation) {
+    _sqldb.Case.update({ status_id: 1 }, {
+      where: {
+        id: req.body.case_id
+      }
+    }).then(function () {
+      return res.json(allocation);
+    });
+  }).catch(handleError(res));
 }
 
 // Updates an existing Allocation in the DB
@@ -157,7 +165,7 @@ function byStatusId(req, res) {
     where: whereClause,
     include: [{
       model: _sqldb.Case,
-      where: { status_id: req.params.status_id },
+      where: { status_id: req.params.status_id.split(',') },
       include: [_sqldb2.default.User, _sqldb2.default.Status, _sqldb2.default.CaseType]
     }, { model: _sqldb2.default.User }, { model: _sqldb2.default.AllocationStatus }]
   }).then(respondWithResult(res)).catch(handleError(res));

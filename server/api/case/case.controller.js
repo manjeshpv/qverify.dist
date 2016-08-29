@@ -83,8 +83,10 @@ function index(req, res) {
     };
   }
   return _sqldb.Case.findAll({
+    attributes: ['id', 'name', 'created_at', 'updated_at'],
     where: whereClause,
-    include: [_sqldb.Status, _sqldb.CaseType]
+    order: 'created_at DESC',
+    include: [{ model: _sqldb.Status, attributes: ['id', 'name'] }, { model: _sqldb.User, attributes: ['id', 'name'] }, { model: _sqldb.CaseType, attributes: ['id', 'name'] }, { model: _sqldb.Allocation, attributes: ['id'], include: [{ model: _sqldb.User, attributes: ['id', 'name'] }], required: false }]
   }).then(respondWithResult(res)).catch(function (err) {
     return handleError(res, 500, err);
   });
@@ -114,9 +116,9 @@ function vendorUploaded(req, res) {
 
 function getFile(req, res) {
   return _sqldb.Case.findById(req.params.id).then(function (caseObj) {
-    return res.json(caseObj.pdf);
     return _sqldb.Minio.downloadLink({
-      object: caseObj.pdf
+      object: caseObj.pdf,
+      name: caseObj.id + '.pdf'
     }).then(function (link) {
       return res.redirect(link);
     });
@@ -127,7 +129,6 @@ function getFile(req, res) {
 
 // Creates a new Case in the DB
 function create(req, res) {
-  req.body.status_id = 1;
   return _sqldb2.default.Case.create(req.body).then(function (caseObj) {
     /* Start Minio */
     var _req$body$logo = req.body.logo;
@@ -137,10 +138,10 @@ function create(req, res) {
     var extention = filename.substring(filename.lastIndexOf('.') + 1);
 
     // only upload if valid file extension
-    if (~['doc', 'docx', 'pdf', 'rtf', 'txt'].indexOf(extention)) {
+    if (~['doc', 'docx', 'pdf', 'rtf', 'txt', 'png', 'jpeg'].indexOf(extention)) {
       (function () {
 
-        var rangeFolder = caseObj.id - caseObj.id % 10000;
+        var rangeFolder = caseObj.id - caseObj.id % 100000;
         var minioObject = {
           // object: 'cases/0/5/5.pdf'
           object: 'cases/' + rangeFolder + '/' + caseObj.id + '/' + caseObj.id + '.' + extention.toLowerCase(),
@@ -183,6 +184,8 @@ function create(req, res) {
 
     return casePr.then(function () {
       return res.json(caseObj);
+    }).catch(function (err) {
+      return handleError(res, 500, err);
     });
   }).catch(function (err) {
     return handleError(res, 500, err);

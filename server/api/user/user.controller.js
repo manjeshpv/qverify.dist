@@ -83,7 +83,11 @@ function handleError(res, statusCode) {
 
 // Gets a list of Users
 function index(req, res) {
-  return _sqldb.User.findAll().then(respondWithResult(res)).catch(handleError(res));
+  return _sqldb.User.findAll({
+    attributes: ['id', 'name'],
+    where: whereClause,
+    include: [{ model: _sqldb.Company, attributes: ['name'] }]
+  }).then(respondWithResult(res)).catch(handleError(res));
 }
 
 // Gets a single User from the DB
@@ -162,12 +166,11 @@ function register(req, res) {
   //console.log(req.params);
   //console.log(req.query);
   //console.log(req.body);
-
   return _sqldb.User.create(req.body).then(function (user) {
     return res.json(user);
   }).catch(function (err) {
     console.log(err);
-    return res.status(404).json("Invalid data");
+    return res.status(404).json(err);
   });
 }
 
