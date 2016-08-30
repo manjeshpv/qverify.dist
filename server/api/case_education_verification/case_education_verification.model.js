@@ -15,7 +15,10 @@ exports.default = function (sequelize, DataTypes) {
     role_no: DataTypes.STRING,
     passing_year: DataTypes.STRING,
     verifier_name: DataTypes.STRING,
-    remarks: DataTypes.STRING
+    remarks: DataTypes.STRING,
+    university_name: DataTypes.STRING,
+    degree: DataTypes.STRING,
+    designation: DataTypes.STRING
 
   }, {
     tableName: 'case_education_verifications',
@@ -23,15 +26,15 @@ exports.default = function (sequelize, DataTypes) {
     timestamps: false,
     classMethods: {
       associate: function associate(models) {
-        models.CaseEducationVerification.belongsTo(models.UniversityName, {
-          foreignKey: 'university_name_id'
-        });
-        models.CaseEducationVerification.belongsTo(models.Degree, {
-          foreignKey: 'degree_id'
-        });
-        models.CaseEducationVerification.belongsTo(models.Designation, {
-          foreignKey: 'designation_id'
-        });
+        //models.CaseEducationVerification.belongsTo(models.UniversityName, {
+        //  foreignKey: `university_name_id`
+        //});
+        //models.CaseEducationVerification.belongsTo(models.Degree, {
+        //  foreignKey: `degree_id`
+        //});
+        //models.CaseEducationVerification.belongsTo(models.Designation, {
+        //  foreignKey: `designation_id`
+        //});
         models.CaseEducationVerification.belongsTo(models.Case, {
           foreignKey: 'case_id'
         });
