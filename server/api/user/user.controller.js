@@ -84,9 +84,9 @@ function handleError(res, statusCode) {
 // Gets a list of Users
 function index(req, res) {
   return _sqldb.User.findAll({
-    attributes: ['id', 'name'],
+    attributes: ['id', 'name', 'username'],
     where: whereClause,
-    include: [{ model: _sqldb.Company, attributes: ['name'] }]
+    include: [{ model: _sqldb.Company, attributes: ['name', 'username'] }]
   }).then(respondWithResult(res)).catch(handleError(res));
 }
 

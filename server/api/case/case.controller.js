@@ -98,7 +98,12 @@ function show(req, res) {
     where: {
       id: req.params.id
     },
-    include: [{ model: _sqldb.CaseCriminalVerification, include: [_sqldb2.default.Designation] }, { model: _sqldb.CaseAddressVerification, include: [_sqldb2.default.HouseType] }, { model: _sqldb.CaseEducationVerification, include: [_sqldb2.default.Degree, _sqldb2.default.Designation] }, { model: _sqldb.CaseSiteVerification, include: [_sqldb2.default.Designation] }, { model: _sqldb.User }]
+    include: [
+    //{model: CaseCriminalVerification, include: [db.Designation]},
+    { model: _sqldb.CaseCriminalVerification }, { model: _sqldb.CaseAddressVerification, include: [_sqldb2.default.HouseType] }, { model: _sqldb.CaseEducationVerification }, { model: _sqldb.CaseSiteVerification },
+    //{model: CaseEducationVerification, include: [db.Degree, db.Designation]},
+    //{model: CaseSiteVerification, include: [db.Designation]},
+    { model: _sqldb.User }]
   }).then(handleEntityNotFound(res)).then(respondWithResult(res)).catch(function (err) {
     return handleError(res, 500, err);
   });
@@ -184,9 +189,7 @@ function create(req, res) {
 
     return casePr.then(function () {
       return res.json(caseObj);
-    }).catch(function (err) {
-      return handleError(res, 500, err);
-    });
+    }).catch;
   }).catch(function (err) {
     return handleError(res, 500, err);
   });
