@@ -86,8 +86,8 @@ function show(req, res) {
   return _sqldb.Company.find({
     where: {
       id: req.params.id
-    },
-    include: [_sqldb2.default.Location]
+    }
+
   }).then(handleEntityNotFound(res)).then(respondWithResult(res)).catch(handleError(res));
 }
 
